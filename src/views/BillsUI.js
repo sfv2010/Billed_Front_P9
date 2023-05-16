@@ -1,7 +1,6 @@
 import VerticalLayout from "./VerticalLayout.js";
 import ErrorPage from "./ErrorPage.js";
 import LoadingPage from "./LoadingPage.js";
-
 import Actions from "./Actions.js";
 
 const row = (bill) => {
@@ -19,16 +18,55 @@ const row = (bill) => {
     `;
 };
 
+//The rows function takes multiple billing data and transforms each data into a table row using the row function.
 const rows = (data) => {
+    //sort descending order
+
+    return data && data.length
+        ? sortData(data)
+              .map((bill) => row(bill))
+              .join("")
+        : "";
+};
+function sortData(data) {
+    return data.sort((a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1));
+}
+
+const rows1 = (data) => {
+    //sort descending order
     const sortData = [...data].sort((a, b) =>
-        new Date(a.date).getTime() < new Date(b.date).getTime() ? 1 : -1
+        convertDateFormat(a.date) < convertDateFormat(b.date) ? 1 : -1
     );
+    console.log(sortData);
     return sortData && sortData.length
         ? sortData.map((bill) => row(bill)).join("")
         : "";
-    // return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 };
 
+const convertMonthFormat = {
+    "Jan.": 1,
+    "Fév.": 2,
+    "Mar.": 3,
+    "Avr.": 4,
+    "Mai.": 5,
+    "Jui.": 6,
+    "Jui.": 7,
+    "Aoû.": 8,
+    "Sep.": 9,
+    "Oct.": 10,
+    "Nov.": 11,
+    "Déc.": 12,
+};
+
+function convertDateFormat(date) {
+    let [day, monthShort, year] = date.split(" ");
+    const month = convertMonthFormat[monthShort];
+    //year = `20${year}`;
+    console.log(new Date(`20${year}`, month, day));
+    return new Date(`20${year}`, month, day);
+}
+
+//The modal function generates the HTML content of the modal dialog for the file.
 export default ({ data: bills, loading, error }) => {
     const modal = () => `
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
