@@ -29,6 +29,10 @@ describe("Given I am connected as an employee", () => {
             })
         );
     });
+    afterEach(() => {
+        document.body.innerHTML = "";
+        localStorage.clear();
+    });
 
     describe("When I am on Bills Page", () => {
         test("Then bill icon in vertical layout should be highlighted", async () => {
@@ -58,6 +62,7 @@ describe("Given I am connected as an employee", () => {
     });
     describe("When I am on Bills Page and I click on the New Bill button", () => {
         test("Then, It should renders New Bill page", () => {
+            document.body.innerHTML = BillsUI({ data: bills });
             //simulate a page change in the application
             const onNavigate = (pathname) => {
                 document.body.innerHTML = ROUTES({ pathname });
@@ -69,7 +74,7 @@ describe("Given I am connected as an employee", () => {
                 store: null,
                 localStorage: window.localStorage,
             });
-            document.body.innerHTML = BillsUI({ data: bills });
+
             // check if the handleClickNewBill function has been called or not when the user clicks on the "New Bill" button
             const handleClickNewBill = jest.fn(initBills.handleClickNewBill);
             //await waitFor(() => screen.getByTestId("btn-new-bill"));
@@ -87,14 +92,10 @@ describe("Given I am connected as an employee", () => {
     });
     describe("When I am on Bills Page and I click on the icon eye", () => {
         test("Then,the modal should open", () => {
-            const onNavigate = (pathname) => {
-                document.body.innerHTML = ROUTES({ pathname });
-            };
             document.body.innerHTML = BillsUI({ data: bills });
-
             const initBills = new Bills({
                 document,
-                onNavigate,
+                onNavigate: null,
                 store: null,
                 localStorage: window.localStorage,
             });
@@ -121,14 +122,13 @@ describe("Given I am connected as an employee", () => {
             document.body.append(root);
             router();
             window.onNavigate(ROUTES_PATH.Bills);
-            //awaitFor pas besoin..pourquoi?
             const myExpenseReports = await waitFor(() =>
                 screen.getByText("Mes notes de frais")
             );
             expect(myExpenseReports).toBeTruthy();
             const mockStoreBills = new Bills({
                 document,
-                onNavigate,
+                onNavigate: null,
                 store: mockStore,
                 localStorage: window.localStorage,
             });
