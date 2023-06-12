@@ -23,19 +23,20 @@ export default class NewBill {
         e.preventDefault();
         const file = this.document.querySelector(`input[data-testid="file"]`)
             .files[0];
+        //console.log(e.target.value);=C:\fakepath\JS Arraysheet.png
         const filePath = e.target.value.split(/\\/g);
         const fileName = filePath[filePath.length - 1];
         const formData = new FormData();
         const email = JSON.parse(localStorage.getItem("user")).email;
         formData.append("file", file);
         formData.append("email", email);
-        //-----check extension-----
+        //-----Check file extension-----
         const allowedExtensions = ["jpg", "jpeg", "png"];
         const fileExtension = fileName.split(".").pop().toLowerCase();
         if (!allowedExtensions.includes(fileExtension)) {
             return;
         }
-
+        //uploading file to <server></server>
         this.store
             .bills()
             .create({
@@ -82,6 +83,7 @@ export default class NewBill {
             fileName: this.fileName,
             status: "pending",
         };
+        //The bill object is used to call this.updateBill(bill) to update the bill. It then calls this.onNavigate(ROUTES_PATH["Bills"]) to navigate to the appropriate page.
         this.updateBill(bill);
         this.onNavigate(ROUTES_PATH["Bills"]);
     };
