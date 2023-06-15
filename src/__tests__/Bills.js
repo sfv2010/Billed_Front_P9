@@ -60,6 +60,7 @@ describe("Given I am connected as an employee", () => {
             expect(dates).toEqual(datesSorted);
         });
     });
+
     describe("When I am on Bills Page and I click on the New Bill button", () => {
         test("Then, It should renders New Bill page", () => {
             document.body.innerHTML = BillsUI({ data: bills });
@@ -77,7 +78,6 @@ describe("Given I am connected as an employee", () => {
 
             // check if the handleClickNewBill function has been called or not when the user clicks on the "New Bill" button
             const handleClickNewBill = jest.fn(initBills.handleClickNewBill);
-            //await waitFor(() => screen.getByTestId("btn-new-bill"));
             const newBillButton = screen.getByTestId("btn-new-bill");
 
             newBillButton.addEventListener("click", handleClickNewBill);
