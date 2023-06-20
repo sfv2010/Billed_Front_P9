@@ -45,7 +45,7 @@ describe("Given I am connected as an employee", () => {
             const initNewBill = new NewBill({
                 document,
                 onNavigate,
-                store: mockStore,
+                store: null,
                 localStorage: window.localStorage,
             });
 
